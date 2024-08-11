@@ -1,0 +1,5 @@
+OVERALL
+- make unit tests
+- split into different files/modules
+- make different versions of the "core interpreter"
+    - lazy, eager

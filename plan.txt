@@ -1,0 +1,14 @@
+- parser: parse the AST into a list of expressions
+    - wrap values into types (constructors)? e.g. (num 2)
+    - require type annotations in lisp e.g. (defun test:integer (a1:type a2:type) ...) (do this once type checking has been added)
+- module/function for syntactic sugar replacements
+
+- arithmetic expressions
+- boolean expressions
+- string expressions
+- conditional?
+
+- think of more efficient data structure for env that still works as a stack
+- stack frame data structure where each stack frame is a hash table? or is that overkill
+
+- make arity part of the function signature lookup thing
