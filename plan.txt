@@ -27,3 +27,5 @@ DESUGARER
 - structs into lambda definition (cs 135)
 - const as nested let -> lambda expressions
 - defn as a const mapping an identifier to a lambda in the environment (that's all a named function is!)
+- cond -> nested if statements
+- and and or into if statements (short circuiting)
