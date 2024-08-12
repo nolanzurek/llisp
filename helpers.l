@@ -21,7 +21,8 @@
         (if val val symb)))
 
 ; check if a function is primitive
-(defun primitive-fn? (fn) (if (eq fn '+) T nil))
+(defun primitive-fn? (fn) 
+  (member fn '(+ - * > < / = not and or cons equal car cdr number if null atom eq)))
 
 ; check if a function is a lambda function
 (defun lambda-ap? (expr) (if (and (not (atom (car expr))) (eq (car (car expr)) 'lambda)) T nil))
@@ -30,4 +31,36 @@
 (defun apply-primitive (fn args) 
     (cond 
         ((eq fn '+) (+ (car args) (cadr args)))
-        (T 0)))
+        ((eq fn '-) (- (car args) (cadr args)))
+        ((eq fn '*) (* (car args) (cadr args)))
+        ((eq fn '/) (/ (car args) (cadr args)))
+        ((eq fn '>) (> (car args) (cadr args)))
+        ((eq fn '=) (= (car args) (cadr args)))
+        ((eq fn 'not) (if (not (car args)) T nil))
+        ((eq fn 'and) (if (and (car args) (cadr args)) T nil))
+        ((eq fn 'or) (if (or (car args) (cadr args)) T nil))
+        ((eq fn 'cons) (cons (car args) (cadr args)))
+        ((eq fn 'equal) (if (equal (car args) (cadr args)) T nil))
+        ((eq fn 'car) (car (car args)))
+        ((eq fn 'cdr) (cdr (car args)))
+        ((eq fn 'number) (numberp (car args)))
+        ((eq fn 'null) (if (null (car args)) T nil))
+        ((eq fn 'atom) (if (atom (car args)) T nil))
+        ((eq fn 'eq) (if (eq (car args) (cadr args)) T nil))
+        (T (error "primitive function not defined"))))
+
+(defun check-primitive-fn (fn) 
+  (cond 
+    ((eq fn 'number) (lambda (x) (numberp x)))
+    ((eq fn 'and) (lambda (x y) (if (and x y) T nil)))
+    ((eq fn 'or) (lambda (x y) (if (or x y) T nil)))
+    ((eq fn 'not) (lambda (x) (if (not x) T nil)))
+    ((eq fn 'null) (lambda (x) (if (null x) T nil)))
+    ((eq fn 'atom) (lambda (x) (if (atom x) T nil)))
+    ((eq fn 'eq) (lambda (x y) (if (eq x y) T nil)))
+    ((eq fn 'equal) (lambda (x y) (if (equal x y) T nil)))
+    ((eq fn '> ) (lambda (x y) (if (> x y) T nil)))
+    ((eq fn '<) (lambda (x y) (if (< x y) T nil)))
+    ((eq fn '=) (lambda (x y) (if (= x y) T nil)))
+    ((eq fn 'if) (lambda (x y z) (if x y z)))
+    (T fn)))

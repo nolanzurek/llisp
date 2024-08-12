@@ -12,3 +12,18 @@
 - stack frame data structure where each stack frame is a hash table? or is that overkill
 
 - make arity part of the function signature lookup thing
+
+- on page 62 of PLAI, there is a slightly different interpretation of lambdas than me:
+    - evaluation goes (lambda -> function), then the "function application?" check checks if the value on the left is a function
+    - so the eval takes an extra step
+    - why wouldn't everyone do it like I did
+    - partially, I think it's because it's cleaner not to have the one case that looks a step ahead of everything else
+    - but if there's a correctness reason thats even worse
+
+DESUGARER
+- list -> cons statements
+- + and * of arbitrary arity into linked list
+- let into lambda definition
+- structs into lambda definition (cs 135)
+- const as nested let -> lambda expressions
+- defn as a const mapping an identifier to a lambda in the environment (that's all a named function is!)
