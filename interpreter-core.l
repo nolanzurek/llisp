@@ -1,11 +1,12 @@
-(load "./tests/test-programs.l")
 (load "./helpers.l") ;; helper functions
+(load "./desugarer.l")
 
 ; evaluate the program on its own, with an empty environment
 (defun eval-program (program)
-    (eval-expr program (list (cons 'T T) (cons 'F nil) (cons 'nil nil)) ))
+    (eval-expr (desugar program) (list (cons 'T T) (cons 'F nil) (cons 'nil nil))))
 
 ; evaluate an expression in an environment
+; TODO: make this a let and define fn name and args (might need to nest tho)
 (defun eval-expr (expr env)
     (cond 
         ((numberp expr) expr)
@@ -21,6 +22,12 @@
                 (eval-expr (cadr expr) env) 
                 (eval-expr (caddr expr) env) 
                 (eval-expr (cadddr expr) env)))
+        ; if we are evaluating a short circuiting operator, handle it specifically
+        ; the desugarer guarentees that each or and and statement contains two arguments
+        ((eq (car expr) 'or) 
+            (if (eval-expr (cadr expr) env) T (eval-expr (caddr expr) env)))
+        ((eq (car expr) 'and) 
+            (if (eval-expr (cadr expr) env) (eval-expr (caddr expr) env) nil))
         ; check if primitive function; if so, defer to lisp
         ((primitive-fn? (car expr)) (apply-primitive (car expr) (eval-expr-list (cdr expr) env)))
         ; if we are using a lambda function, we don't need to evaluate it. We wait to apply it
@@ -34,8 +41,11 @@
         (T (let ((fn (eval-expr (car expr) env)))
             (eval-expr (cons fn (cdr expr)) env)))))
 
-(print (if (eq (eval-program program1) 36) 'pass 'fail))
-(print (if (eq (eval-program program2) 14) 'pass 'fail))
-; (print (if (eval-program shortCircuit2) 'pass 'fail))
-(print (eval-program shortCircuit2))
+; (check-expect (eval-program '(+ 1 2 3 4 5 6)) 21)
 
+; (print (if (eq (eval-program program1) 36) 'pass 'fail))
+; (print (if (eq (eval-program program2) 14) 'pass 'fail))
+; (print (if (eval-program shortCircuit2) 'pass 'fail))
+; (print (eval-program shortCircuit2))
+
+; (print (eval-program '(let ((a 1) (b 2)) (+ a b))))

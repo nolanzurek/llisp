@@ -21,11 +21,24 @@
     - but if there's a correctness reason thats even worse
 
 DESUGARER
-- list -> cons statements
-- + and * of arbitrary arity into linked list
-- let into lambda definition
+- [/] list -> cons statements
+- [/] + and * of arbitrary arity into linked list
+- [/] let into lambda definition
 - structs into lambda definition (cs 135)
 - const as nested let -> lambda expressions
 - defn as a const mapping an identifier to a lambda in the environment (that's all a named function is!)
-- cond -> nested if statements
-- and and or into if statements (short circuiting)
+- [/] cond -> nested if statements
+- [/] and and or into if statements (short circuiting)
+- [/] ineuqalities as desugaring
+
+implement defsyntax so that users can define their own macros
+implement quoting
+
+do blocks? imperativity? look through CS 146!!
+
+test for closures! If we define a lambda in a let block, let some variable names, then use those in the function, they should be defined when the function is called again elsewhere..
+although this requires defun stuff
+
+Add to config: check-test mode. If true it will run and print the results of the tests
+
+in 135 notes: note that we can use the substitution rule for cond directly (evaluating with an if statement) instead of desugaring then evaluating
